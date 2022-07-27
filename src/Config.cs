@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Tomlyn;
+﻿using Tomlyn;
 
 namespace VtLookup
 {
@@ -11,6 +6,7 @@ namespace VtLookup
     {
         #region Member Variables
         public string ApiKey { get; set; } = "";
+        public int BatchSize { get; set; } = 100;
         private const string FILENAME = "VtLookup.config";
         #endregion
 
@@ -30,6 +26,7 @@ namespace VtLookup
                 
                 var toml = Toml.ToModel<Config>(File.ReadAllText(this.GetPath()));
                 this.ApiKey = toml.ApiKey;
+                this.BatchSize = toml.BatchSize;
 
                 return string.Empty;
             }

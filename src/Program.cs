@@ -67,7 +67,7 @@ rootCommand.SetHandler((inputFile, outputDir) =>
     VirusTotal virusTotal = new VirusTotal(config.ApiKey);
     virusTotal.UseTLS = true;
 
-    virusTotal.FileReportBatchSizeLimit = 100;
+    virusTotal.FileReportBatchSizeLimit = config.BatchSize;
 
     var values = File.ReadAllLines(inputFile.FullName);
 
@@ -104,7 +104,7 @@ rootCommand.SetHandler((inputFile, outputDir) =>
                     List<string> batch = new List<string>();
                     foreach (string val in values)
                     {
-                        if (batch.Count == 100)
+                        if (batch.Count == config.BatchSize)
                         {
                             var fileReports = virusTotal.GetFileReportsAsync(batch).Result;
                             foreach (var fileReport in fileReports)
@@ -113,7 +113,7 @@ rootCommand.SetHandler((inputFile, outputDir) =>
                             }
 
                             batch = new List<string>();
-                            task.Increment(100);
+                            task.Increment(config.BatchSize);
                         }
 
                         batch.Add(val);
@@ -145,8 +145,10 @@ initCommand.SetHandler((delayOptionValue) =>
         return;
     }
 
-    Config config = new Config();
-    config.ApiKey = apiKey;
+    Config config = new Config
+    {
+        ApiKey = apiKey
+    };
 
     string ret = config.Save();
     if (string.IsNullOrEmpty(ret) == false)
