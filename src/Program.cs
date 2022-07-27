@@ -3,7 +3,6 @@ using Spectre.Console;
 using System.CommandLine;
 using System.Globalization;
 using VirusTotalNet;
-using VirusTotalNet.Results;
 using VtLookup;
 
 /// <summary>
